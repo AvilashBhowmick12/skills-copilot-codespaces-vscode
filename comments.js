@@ -1,23 +1,19 @@
-//Create web Server
+// Import necessary modules
 const express = require('express');
-const app = express();
-const path = require('path');
-const port = 3000;
-const bodyParser = require('body-parser');
+const router = express.Router();
+const commentController = require('../controllers/commentController');
 
-//Body Parser
-app.use(bodyParser.urlencoded({ extended: true }));
+// Handle requests
+router.get('/', commentController.comment_list); // List all comments
+router.get('/create', commentController.comment_create_get); // Show form to create a comment
 
-//Set view engine to ejs
-app.set('view engine', 'ejs');
+// You might also want to handle POST requests to create a comment
+router.post('/create', commentController.comment_create_post); // Create a comment
 
-//Set static files
-app.use(express.static(path.join(__dirname, 'public')));
+// And maybe routes for updating and deleting comments
+router.get('/:id/update', commentController.comment_update_get); // Show form to update a comment
+router.post('/:id/update', commentController.comment_update_post); // Update a comment
+router.get('/:id/delete', commentController.comment_delete_get); // Confirm deletion of a comment
+router.post('/:id/delete', commentController.comment_delete_post); // Delete a comment
 
-//Set routes
-app.use(require('./routes/index'));
-app.use(require('./routes/comments'));
-app.use(require('./routes/users'));
-
-//Start server
-app.listen(port, () => console.log(`Server stated on port ${port}`));
+module.exports = router;
